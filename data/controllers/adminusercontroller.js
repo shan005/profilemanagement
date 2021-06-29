@@ -213,7 +213,44 @@ const adminUpdateAdminsUsers = async function (req, res) {
 }
 
 
+const adminUserViewHimself = async function (req, res) {
+    let isValidParams = req.headers.token
+    let promise = new Promise(async function (resolve, reject) {
+        try {
+            if (isValidParams) {
+                let verifyId = jwt.verify(req.headers.token, secret)
+                console.log('Id', verifyId);
+                let checkId = await AdminUser.findOne({ _id: verifyId._id })
+                console.log(checkId.email);
+                if (checkId) {
 
+                    let findEmail = await AdminUser.find({ email: checkId.email })
+                    resolve({ success: true, get: findEmail })
+                    console.log("fields", findEmail);
+
+
+                } else {
+                    reject({ success: false, message: "Admin Not found" })
+                }
+
+            } else {
+                reject({ success: false, message: "Required token" })
+            }
+        } catch (error) {
+            reject({ success: false, message: "Error while Getting Profile " })
+        }
+    });
+    promise.
+        then(function (data) {
+            console.log('success')
+            res.send({ success: data.success, get: data.get, getData: data.getData });
+
+        }).catch(function (error) {
+            console.log('Inside catch', error)
+            res.send({ success: error ? error.success : false, message: error ? error.message : 'Error occured while Editing', error: error });
+        });
+
+}
 
 
 module.exports = {
@@ -221,5 +258,6 @@ module.exports = {
     adminuserLogin,
     adminAddAdminsUsers,
     updateAdminUserHimself,
-    adminUpdateAdminsUsers
+    adminUpdateAdminsUsers,
+    adminUserViewHimself
 }

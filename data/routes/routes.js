@@ -15,6 +15,7 @@ router.post('/adminUserLogin', AdminUserController.adminuserLogin)
 router.post('/adminAddAdminsUsers', AdminUserController.adminAddAdminsUsers)
 router.post('/updateAdminUserHimself', AdminUserController.updateAdminUserHimself)
 router.post('/adminUpdateAdminsUsers', AdminUserController.adminUpdateAdminsUsers)
+router.get('/adminViewProfileHimself', AdminUserController.adminUserViewHimself)
 
 
 
